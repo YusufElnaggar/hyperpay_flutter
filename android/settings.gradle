@@ -1,0 +1,4 @@
+include ':oppwa.mobile'
+
+rootProject.name = 'hyperpay_flutter'
+

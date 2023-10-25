@@ -1,0 +1,39 @@
+PODS:
+  - Flutter (1.0.0)
+  - hyperpay_flutter (0.0.1):
+    - Flutter
+    - oppwamobile (~> 4.8.0)
+  - integration_test (0.0.1):
+    - Flutter
+  - oppwamobile (4.8.0)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - hyperpay_flutter (from `.symlinks/plugins/hyperpay_flutter/ios`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+  - oppwamobile (from `https://github.com/YusufElnaggar/oppwamobile-ios-sdk`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  hyperpay_flutter:
+    :path: ".symlinks/plugins/hyperpay_flutter/ios"
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+  oppwamobile:
+    :git: https://github.com/YusufElnaggar/oppwamobile-ios-sdk
+
+CHECKOUT OPTIONS:
+  oppwamobile:
+    :commit: 47ce3156c19543f9221330734377b1fd2c9801f7
+    :git: https://github.com/YusufElnaggar/oppwamobile-ios-sdk
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  hyperpay_flutter: 49445e960fa89584051d34ebfd7cb918bc328d23
+  integration_test: 13825b8a9334a850581300559b8839134b124670
+  oppwamobile: 92a46de1063e29da635120ac0179998faf923dd1
+
+PODFILE CHECKSUM: c015ec7e0e88703d21a6b90d74cba68df18b1b81
+
+COCOAPODS: 1.13.0
