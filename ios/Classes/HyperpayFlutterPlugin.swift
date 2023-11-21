@@ -469,6 +469,14 @@ public class HyperpayFlutterPlugin: NSObject, FlutterPlugin ,OPPThreeDSEventList
             alertController.addAction(UIAlertAction(title: NSLocalizedString("ok", comment: ""), style: .default,handler: { (action) in alertController.dismiss(animated: true, completion: nil)}))
             UIApplication.shared.delegate?.window??.rootViewController?.present(alertController, animated: true, completion: nil)
         }}
+
+    public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        self.paymentResult!("canceled")
+    }
+    
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        self.paymentResult!("canceled")
+    }
     
     
     
