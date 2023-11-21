@@ -474,6 +474,8 @@ public class HyperpayFlutterPlugin: NSObject, FlutterPlugin ,OPPThreeDSEventList
     
     public func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
         controller.dismiss(animated: true, completion: nil)
+        self.Presult!("canceled")
+
     }
     
     

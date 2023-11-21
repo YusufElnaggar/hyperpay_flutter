@@ -318,51 +318,86 @@ class HyperpayFlutterPlugin : FlutterPlugin, ActivityAware, ActivityResultListen
         handler.post { this.result!!.notImplemented() }
     }
 
-    override fun brandsValidationRequestSucceeded(brandsValidation: BrandsValidation) {}
+    override fun brandsValidationRequestSucceeded(brandsValidation: BrandsValidation) {
 
-    override fun brandsValidationRequestFailed(paymentError: PaymentError) {}
+        Log.d("hyperpay_flutter","payment :  brandsValidationRequestSucceeded" )
+    }
 
-    override fun imagesRequestSucceeded(imagesRequest: ImagesRequest) {}
+    override fun brandsValidationRequestFailed(paymentError: PaymentError) {
 
-    override fun imagesRequestFailed() {}
+        Log.d("hyperpay_flutter","payment :  brandsValidationRequestFailed" )
+    }
+
+    override fun imagesRequestSucceeded(imagesRequest: ImagesRequest) {
+
+        Log.d("hyperpay_flutter","payment :  imagesRequestSucceeded" )
+    }
+
+    override fun imagesRequestFailed() {
+        Log.d("hyperpay_flutter","payment :  imagesRequestFailed" )
+
+    }
     
-    override fun paymentConfigRequestSucceeded(checkoutInfo: CheckoutInfo) {}
+    override fun paymentConfigRequestSucceeded(checkoutInfo: CheckoutInfo) {
+        Log.d("hyperpay_flutter","payment :  paymentConfigRequestSucceeded" )
 
-    override fun paymentConfigRequestFailed(paymentError: PaymentError) {}
+    }
+
+    override fun paymentConfigRequestFailed(paymentError: PaymentError) {
+
+        Log.d("hyperpay_flutter","payment :  paymentConfigRequestFailed" )
+    }
 
 
     override fun transactionCompleted(transaction: Transaction) {
+        Log.d("hyperpay_flutter","payment :  transactionCompleted" )
         if (transaction == null) {
             return
         }
         if (transaction.transactionType == TransactionType.SYNC) {
+            Log.d("hyperpay_flutter","transaction.transactionType : " + transaction.transactionType)
             success("SYNC")
         } else {
+            Log.d("hyperpay_flutter","transaction.transactionType : " + transaction.transactionType)
             /* wait for the callback in the s */
             val uri = Uri.parse(transaction.redirectUrl)
             val intent = Intent(Intent.ACTION_VIEW, uri)
+            Log.d("hyperpay_flutter","intent : " + intent!!.toString())
             activity.startActivity(intent)
         }
     }
     
     override fun transactionFailed(transaction: Transaction, paymentError: PaymentError) {
+        Log.d("hyperpay_flutter","payment :  transactionFailed" )
         error("transactionFailed", paymentError.errorMessage, "transactionFailed")
     }
     
     
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        Log.d("hyperpay_flutter","payment :  onAttachedToActivity" )
         activity = binding.activity
         binding.addActivityResultListener(this)
         binding.addOnNewIntentListener(this)
     }
-    override fun onDetachedFromActivityForConfigChanges() {}
+    override fun onDetachedFromActivityForConfigChanges() {
+        Log.d("hyperpay_flutter","payment :  onDetachedFromActivityForConfigChanges" )
+        
+    }
     
-    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {}
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        Log.d("hyperpay_flutter","payment :  onReattachedToActivityForConfigChanges" )
+        
+    }
     
-    override fun onDetachedFromActivity() {}
-
-
+    override fun onDetachedFromActivity() {
+        Log.d("hyperpay_flutter","payment :  onDetachedFromActivity" )
+        
+    }
+    
+    
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+        Log.d("hyperpay_flutter","payment :  onActivityResult" )
+        Log.d("hyperpay_flutter","resultCode : " + resultCode!!.toString())
         when (resultCode) {
             CheckoutActivity.RESULT_OK -> {
                 val transaction = data?.getParcelableExtra<Transaction>(CheckoutActivity.CHECKOUT_RESULT_TRANSACTION)
@@ -377,6 +412,7 @@ class HyperpayFlutterPlugin : FlutterPlugin, ActivityAware, ActivityResultListen
     }
     
     override fun onNewIntent(intent: Intent): Boolean {
+        Log.d("hyperpay_flutter","payment :  onNewIntent" )
         if (intent?.scheme != null && intent.scheme == shopperResultUrl+".payment") {
             success("success")
         }
