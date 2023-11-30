@@ -514,10 +514,12 @@ public class HyperpayFlutterPlugin: NSObject, FlutterPlugin ,OPPThreeDSEventList
                 if (error != nil) {
                     // See code attribute (OPPErrorCode) and NSLocalizedDescription to identify the reason of failure.
                     print(error?.localizedDescription as Any)
+                    callDidAuthorizePayment = false
                     self.createalart(titletext: "APPLEPAY Error", msgtext: "")
                 } else {
                     // Send request to your server to obtain transaction status.
                     completion(.success)
+                    callDidAuthorizePayment = false
                     self.Presult!("success")
                 }
             })
