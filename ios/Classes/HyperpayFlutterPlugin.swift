@@ -29,6 +29,8 @@ public class HyperpayFlutterPlugin: NSObject, FlutterPlugin ,OPPThreeDSEventList
     var amount:Double = 1;
     
     var safariVC: SFSafariViewController?
+
+    var callDidAuthorizePayment = false
     
     var transaction: OPPTransaction?
     
@@ -52,6 +54,9 @@ public class HyperpayFlutterPlugin: NSObject, FlutterPlugin ,OPPThreeDSEventList
         self.Presult = result
         
         if call.method == "gethyperpayresponse"{
+            
+            print("paymentAuthorizationViewControllerDidFinish")
+            NSLog("paymentAuthorizationViewControllerDidFinish")
             
             print("gethyperpayresponse")
             
@@ -78,7 +83,7 @@ public class HyperpayFlutterPlugin: NSObject, FlutterPlugin ,OPPThreeDSEventList
                 self.tokenId = (args!["tokenId"] as? String)!
                 self.cvv = (args!["cvv"] as? String)!
                 self.brand = (args!["brand"] as? String)!
-                self.openStotredCustomUI(checkoutId: self.checkoutid, tokenID: self.tokenId, brand: self.brand, cvv: self.cvv, result1:result);
+                self.openStotredCustomUI(checkoutId: self.checkoutid, tokenID: self.tokenId, brand: self.brand, cvv: self.cvv, result1:result)
             }
             
             else if self.type=="CustomUI" {
@@ -369,7 +374,7 @@ public class HyperpayFlutterPlugin: NSObject, FlutterPlugin ,OPPThreeDSEventList
                     UIApplication.shared.delegate?.window??.rootViewController?.present(vc, animated: true, completion: nil)
                 } else {
                     self.createalart(titletext: "Apple Pay not supported", msgtext: "")
-                    NSLog("Apple Pay not supported.");
+                    NSLog("Apple Pay not supported.")
                 }
             }
             else{
@@ -470,31 +475,45 @@ public class HyperpayFlutterPlugin: NSObject, FlutterPlugin ,OPPThreeDSEventList
             UIApplication.shared.delegate?.window??.rootViewController?.present(alertController, animated: true, completion: nil)
         }}
 
-    public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        self.paymentResult!("canceled")
-    }
+    // public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+    //     self.paymentResult!("canceled")
+    // }
     
-    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        self.paymentResult!("canceled")
-    }
+    // public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+    //     self.paymentResult!("canceled")
+    // }
     
     
     
     public func paymentAuthorizationViewControllerDidFinish(_ controller: PKPaymentAuthorizationViewController) {
-        controller.dismiss(animated: true, completion: nil)
-        self.Presult!("canceled")
+        print("paymentAuthorizationViewControllerDidFinish")
+        NSLog("paymentAuthorizationViewControllerDidFinish")
+
+        // controller.dismiss(animated: true, completion: nil)
+        controller.dismiss(animated: true){
+            DispatchQueue.main.async {
+
+                if !self.callDidAuthorizePayment {
+                    
+                    self.Presult!("canceled")
+                }
+            }
+
+        }
 
     }
     
     
     public func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController, didAuthorizePayment payment: PKPayment, completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
+        print("paymentAuthorizationViewController")
+        NSLog("paymentAuthorizationViewController")
+        callDidAuthorizePayment = true
         if let params = try? OPPApplePayPaymentParams(checkoutID: self.checkoutid, tokenData: payment.token.paymentData) as OPPApplePayPaymentParams? {
             self.transaction  = OPPTransaction(paymentParams: params)
             self.provider.submitTransaction(OPPTransaction(paymentParams: params), completionHandler: { (transaction, error) in
                 if (error != nil) {
                     // See code attribute (OPPErrorCode) and NSLocalizedDescription to identify the reason of failure.
-                    print(error?.localizedDescription)
-                    print("اشكي لمين الهوا")
+                    print(error?.localizedDescription as Any)
                     self.createalart(titletext: "APPLEPAY Error", msgtext: "")
                 } else {
                     // Send request to your server to obtain transaction status.
