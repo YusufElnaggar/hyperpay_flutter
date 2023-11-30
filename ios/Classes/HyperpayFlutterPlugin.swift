@@ -507,7 +507,7 @@ public class HyperpayFlutterPlugin: NSObject, FlutterPlugin ,OPPThreeDSEventList
     public func paymentAuthorizationViewController(_ controller: PKPaymentAuthorizationViewController, didAuthorizePayment payment: PKPayment, completion: @escaping (PKPaymentAuthorizationStatus) -> Void) {
         print("paymentAuthorizationViewController")
         NSLog("paymentAuthorizationViewController")
-        callDidAuthorizePayment = true
+        self.callDidAuthorizePayment = true
         if let params = try? OPPApplePayPaymentParams(checkoutID: self.checkoutid, tokenData: payment.token.paymentData) as OPPApplePayPaymentParams? {
             self.transaction  = OPPTransaction(paymentParams: params)
             self.provider.submitTransaction(OPPTransaction(paymentParams: params), completionHandler: { (transaction, error) in
@@ -515,12 +515,12 @@ public class HyperpayFlutterPlugin: NSObject, FlutterPlugin ,OPPThreeDSEventList
                     // See code attribute (OPPErrorCode) and NSLocalizedDescription to identify the reason of failure.
                     print(error?.localizedDescription as Any)
                     self.createalart(titletext: "APPLEPAY Error", msgtext: "")
-                    callDidAuthorizePayment = false
+                    self.callDidAuthorizePayment = false
                 } else {
                     // Send request to your server to obtain transaction status.
                     completion(.success)
                     self.Presult!("success")
-                    callDidAuthorizePayment = false
+                    self.callDidAuthorizePayment = false
 
                 }
             })
